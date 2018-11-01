@@ -1,7 +1,7 @@
 extern crate ring_buffer;
 extern crate shared_memory;
 
-use shared_memory::{LockType, ReadLockable, SharedMem, WriteLockable};
+use shared_memory::{LockType, SharedMem, WriteLockable};
 use std::ffi::OsStr;
 use std::thread::sleep;
 use std::time::Duration;

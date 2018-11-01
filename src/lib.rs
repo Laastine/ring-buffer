@@ -1,3 +1,8 @@
+extern crate shared_memory;
+
+use shared_memory::{SharedMemCast};
+
+
 pub const LENGTH: usize = 8;
 
 #[derive(Debug)]
@@ -9,12 +14,24 @@ pub struct RingBuffer {
 }
 
 impl RingBuffer {
-  pub fn new() -> Self {
+  pub fn new_empty() -> Self {
     RingBuffer {
       data: [0usize; LENGTH],
       size: 0,
       start_idx: 0,
       end_idx: 0,
+    }
+  }
+
+  pub fn new(data: [usize; LENGTH],
+             size: usize,
+             start_idx: usize,
+             end_idx: usize) -> Self {
+    RingBuffer {
+      data,
+      size,
+      start_idx,
+      end_idx,
     }
   }
 
@@ -30,7 +47,7 @@ impl RingBuffer {
       self.end_idx = 0;
     }
     if self.size < LENGTH { self.size += 1; }
-    println!("start_idx: {}, size: {}", self.start_idx, self.size);
+//    println!("start_idx: {}, size: {}", self.start_idx, self.size);
   }
 
   pub fn pop(&mut self) -> usize {
@@ -47,3 +64,5 @@ impl RingBuffer {
     el
   }
 }
+
+unsafe impl SharedMemCast for RingBuffer {}

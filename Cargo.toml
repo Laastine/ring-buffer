@@ -5,3 +5,4 @@ authors = ["Mikko Kaistinen <mikko.kaistinen@kapsi.fi>"]
 edition = "2018"
 
 [dependencies]
+shared_memory = "*"

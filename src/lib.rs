@@ -1,8 +1,7 @@
 pub const LENGTH: usize = 8;
 
-
 #[derive(Debug)]
-struct RingBuffer {
+pub struct RingBuffer {
   pub data: [usize; LENGTH],
   pub size: usize,
   pub start_idx: usize,
@@ -47,45 +46,4 @@ impl RingBuffer {
     self.size -= 1;
     el
   }
-}
-
-fn main() {
-  let mut rb = RingBuffer::new();
-  rb.insert(0);
-//  println!("{:?}", rb);
-
-  rb.insert(1);
-//  println!("{:?}", rb);
-  rb.insert(2);
-//  println!("{:?}", rb);
-  rb.insert(3);
-//  println!("{:?}", rb);
-  rb.insert(4);
-//  println!("{:?}", rb);
-  rb.insert(5);
-//  println!("{:?}", rb);
-  rb.insert(6);
-//  println!("{:?}", rb);
-  rb.insert(7);
-//  println!("{:?}", rb);
-  rb.insert(8);
-//  println!("{:?}", rb);
-  rb.insert(9);
-//  println!("{:?}", rb);
-  rb.insert(10);
-//  println!("{:?}", rb);
-  rb.insert(11);
-//  println!("{:?}", rb);
-  rb.insert(12);
-//  println!("{:?}", rb);
-  rb.insert(13);
-//  println!("{:?}", rb);
-  rb.insert(14);
-//  println!("{:?}", rb);
-  rb.insert(15);
-  rb.insert(16);
-  rb.pop();
-  let res = rb.pop();
-
-  println!("Hello, world {:?}, {}", rb, res);
 }

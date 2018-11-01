@@ -2,7 +2,6 @@
 name = "ring-buffer"
 version = "0.1.0"
 authors = ["Mikko Kaistinen <mikko.kaistinen@kapsi.fi>"]
-edition = "2018"
 
 [dependencies]
-shared_memory = "*"
+shared_memory = "0.8.1"

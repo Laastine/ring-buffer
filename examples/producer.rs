@@ -7,20 +7,6 @@ use std::thread::sleep;
 use std::time::Duration;
 use ring_buffer::{LENGTH, RingBuffer};
 
-pub fn insert(rbuf: &mut RingBuffer, el: usize) -> () {
-  if rbuf.size >= LENGTH {
-    rbuf.start_idx = if rbuf.start_idx == LENGTH - 1 { 0 } else { rbuf.start_idx + 1 };
-  }
-  if rbuf.end_idx < LENGTH - 1 {
-    rbuf.data[rbuf.end_idx] = el;
-    rbuf.end_idx += 1;
-  } else {
-    rbuf.data[rbuf.end_idx] = el;
-    rbuf.end_idx = 0;
-  }
-  if rbuf.size < LENGTH { rbuf.size += 1; }
-}
-
 fn main() {
   let mut num = 0;
 
@@ -50,7 +36,8 @@ fn main() {
       Err(e) => panic!("Read lock error {}", e),
     };
 
-    insert(&mut shared_state, num);
+    shared_state.insert(num);
+
     num += 1;
 
     println!("Data {:?}", shared_state.data);

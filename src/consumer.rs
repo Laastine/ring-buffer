@@ -8,16 +8,12 @@ use std::time::Duration;
 use ring_buffer::RingBuffer;
 
 fn main() {
-  let mut shared_data = match SharedMem::open_linked(OsStr::new("shared_mem.link")) {
-    Ok(val) => val,
-    Err(e) => panic!("Shared memory open error: {}", e)
-  };
+  let mut shared_data = SharedMem::open_linked(OsStr::new("shared_mem.link"))
+    .unwrap_or_else(|e| panic!("Shared memory open error: {}", e));
 
   loop {
-    let mut rb = match shared_data.wlock::<RingBuffer>(0) {
-      Ok(val) => val,
-      Err(e) => panic!("Failed to get read lock {}", e),
-    };
+    let mut rb = shared_data.wlock::<RingBuffer>(0)
+      .unwrap_or_else(|e| panic!("Failed to get read lock {}", e));
 
     let el = rb.pop();
 

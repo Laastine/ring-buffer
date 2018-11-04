@@ -10,17 +10,17 @@ use ring_buffer::{LENGTH, RingBuffer};
 fn main() {
   let mut num = 0;
 
-  let mut shared_data = SharedMem::create_linked(OsStr::new("shared_mem.link"),
-                                                 LockType::Mutex,
-                                                 4096)
-    .unwrap_or_else(|e| panic!("Shared memory create error: {}", e));
+  let mut shared_data =
+    SharedMem::create_linked(OsStr::new("shared_mem.link"),
+                             LockType::Mutex,
+                             4096)
+      .unwrap_or_else(|e| panic!("Shared memory create error: {}", e));
 
 
   {
-    let mut shared_state = match shared_data.wlock::<RingBuffer>(0) {
-      Ok(val) => val,
-      Err(e) => panic!("Failed to create write lock {}", e),
-    };
+    let mut shared_state =
+      shared_data.wlock::<RingBuffer>(0)
+        .unwrap_or_else(|e| panic!("Failed to create write lock {}", e));
 
     shared_state.data = [0usize; LENGTH];
     shared_state.start_idx = 0;
@@ -31,10 +31,9 @@ fn main() {
   println!("Producer initialized");
 
   loop {
-    let mut shared_state = match shared_data.wlock::<RingBuffer>(0) {
-      Ok(val) => val,
-      Err(e) => panic!("Read lock error {}", e),
-    };
+    let mut shared_state =
+      shared_data.wlock::<RingBuffer>(0)
+        .unwrap_or_else(|e| panic!("Read lock error {}", e));
 
     shared_state.insert(num);
 

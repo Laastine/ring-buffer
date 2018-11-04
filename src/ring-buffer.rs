@@ -31,9 +31,8 @@ fn main() {
   println!("Producer initialized");
 
   match fork() {
-    Ok(ForkResult::Parent { child, .. }) => {
-      println!("Parent process, child PID {}", child);
-
+    Ok(ForkResult::Parent { .. }) => {
+      // Producer
       loop {
         let mut shared_state =
           shared_data.wlock::<RingBuffer>(0)
@@ -43,7 +42,7 @@ fn main() {
 
         num += 1;
         //2**24
-        if num == 16777216 {
+        if num == 16_777_216 {
           process::exit(0)
         }
 
@@ -51,6 +50,7 @@ fn main() {
       }
     }
     Ok(ForkResult::Child) => {
+      // Consumer
       loop {
         let mut rb = shared_data.wlock::<RingBuffer>(0)
           .unwrap_or_else(|e| panic!("Failed to get read lock {}", e));

@@ -2,9 +2,8 @@ extern crate shared_memory;
 
 use shared_memory::{SharedMemCast};
 
-pub const LENGTH: usize = 32;
+pub const LENGTH: usize = 1024;
 
-#[derive(Debug)]
 pub struct RingBuffer {
   pub data: [usize; LENGTH],
   pub size: usize,
@@ -49,9 +48,10 @@ impl RingBuffer {
 //    println!("start_idx: {}, size: {}", self.start_idx, self.size);
   }
 
-  pub fn pop(&mut self) -> usize {
+  pub fn pop(&mut self) -> Option<usize> {
     if self.size == 0 {
-      panic!("Empty ring buffer")
+//      panic!("Empty ring buffer")
+      return None
     }
     let el = self.data[self.start_idx];
     if self.start_idx == LENGTH - 1 {
@@ -60,7 +60,7 @@ impl RingBuffer {
       self.start_idx += 1;
     }
     self.size -= 1;
-    el
+    Some(el)
   }
 }
 

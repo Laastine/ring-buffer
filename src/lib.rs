@@ -2,8 +2,7 @@ extern crate shared_memory;
 
 use shared_memory::{SharedMemCast};
 
-
-pub const LENGTH: usize = 8;
+pub const LENGTH: usize = 32;
 
 #[derive(Debug)]
 pub struct RingBuffer {

@@ -24,6 +24,6 @@ fn main() {
     println!("Popped {}", el);
 
     drop(rb);
-    sleep(Duration::from_millis(1000));
+    sleep(Duration::from_nanos(1));
   }
 }

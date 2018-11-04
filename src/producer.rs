@@ -42,6 +42,6 @@ fn main() {
 
     println!("Data {:?}", shared_state.data);
     drop(shared_state);
-    sleep(Duration::from_millis(500));
+    sleep(Duration::from_nanos(1));
   }
 }

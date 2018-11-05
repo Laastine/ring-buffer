@@ -25,7 +25,6 @@ fn main() {
     shared_state.data = [0usize; LENGTH];
     shared_state.start_idx = 0;
     shared_state.end_idx = 0;
-    shared_state.size = 0;
   }
 
   println!("Producer initialized");
@@ -60,6 +59,6 @@ fn main() {
         drop(rb);
       }
     }
-    Err(e) => panic!("Failed to fork child process {:?}", e),
+    Err(e) => panic!("Failed to fork child process {}", e),
   }
 }

@@ -14,7 +14,7 @@ fn main() {
   let mut shared_data =
     SharedMem::create_linked(OsStr::new("shared_mem.link"),
                              LockType::Mutex,
-                             16384)
+                             LENGTH * 8 + 16)
       .unwrap_or_else(|e| panic!("Shared memory create error: {}", e));
 
   {

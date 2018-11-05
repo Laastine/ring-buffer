@@ -58,3 +58,24 @@ impl RingBuffer {
 }
 
 unsafe impl SharedMemCast for RingBuffer {}
+
+#[test]
+fn is_full_test() {
+  let full = RingBuffer::new([0, 0, 0, 0, 0, 0, 0, 0], 6, 5);
+  let full2 = RingBuffer::new([0, 0, 0, 0, 0, 0, 0, 0], 0, 7);
+  let full3 = RingBuffer::new([0, 0, 0, 0, 0, 0, 0, 0], 1, 0);
+  let full4 = RingBuffer::new([0, 0, 0, 0, 0, 0, 0, 0], 2, 1);
+
+  let not_full = RingBuffer::new([0, 0, 0, 0, 0, 0, 0, 0], 0, 0);
+  let not_full2 = RingBuffer::new([0, 0, 0, 0, 0, 0, 0, 0], 4, 7);
+  let not_full3 = RingBuffer::new([0, 0, 0, 0, 0, 0, 0, 0], 7, 1);
+
+  assert_eq!(true, full2.is_full());
+  assert_eq!(true, full.is_full());
+  assert_eq!(true, full3.is_full());
+  assert_eq!(true, full4.is_full());
+
+  assert_eq!(false, not_full.is_full());
+  assert_eq!(false, not_full2.is_full());
+  assert_eq!(false, not_full3.is_full());
+}

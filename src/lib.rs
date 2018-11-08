@@ -4,6 +4,7 @@ use shared_memory::SharedMemCast;
 
 pub const LENGTH: usize = 1024;
 
+//#[derive(Debug)]
 pub struct RingBuffer {
   pub data: [usize; LENGTH],
   pub start_idx: usize,
@@ -31,7 +32,6 @@ impl RingBuffer {
 
   pub fn insert(&mut self, el: usize) -> bool {
     if self.is_full() {
-      self.start_idx = if self.start_idx == LENGTH - 1 { 0 } else { self.start_idx + 1 };
       return false
     }
     if self.end_idx < LENGTH - 1 {
@@ -65,7 +65,7 @@ fn is_full_test() {
   let full = RingBuffer::new([0; LENGTH], 6, 5);
   let full2 = RingBuffer::new([0; LENGTH], 0, LENGTH - 1);
   let full3 = RingBuffer::new([0; LENGTH], 1, 0);
-  let full4 = RingBuffer::new([0; LENGTH], 2, 1);
+  let mut full4 = RingBuffer::new([0; LENGTH], 2, 1);
 
   let not_full = RingBuffer::new([0; LENGTH], 0, 0);
   let not_full2 = RingBuffer::new([0; LENGTH], 4, LENGTH - 1);
@@ -74,6 +74,10 @@ fn is_full_test() {
   assert_eq!(true, full2.is_full());
   assert_eq!(true, full.is_full());
   assert_eq!(true, full3.is_full());
+  assert_eq!(true, full4.is_full());
+
+  let insert_res = full4.insert(12);
+  assert_eq!(false, insert_res);
   assert_eq!(true, full4.is_full());
 
   assert_eq!(false, not_full.is_full());

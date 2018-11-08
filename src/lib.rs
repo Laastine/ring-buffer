@@ -70,17 +70,26 @@ fn is_full_test() {
   let not_full = RingBuffer::new([0; LENGTH], 0, 0);
   let not_full2 = RingBuffer::new([0; LENGTH], 4, LENGTH - 1);
   let not_full3 = RingBuffer::new([0; LENGTH], LENGTH - 1, 1);
+  let mut not_full4 = RingBuffer::new([0; LENGTH], 1, LENGTH - 1);
 
   assert_eq!(true, full2.is_full());
   assert_eq!(true, full.is_full());
   assert_eq!(true, full3.is_full());
   assert_eq!(true, full4.is_full());
 
-  let insert_res = full4.insert(12);
-  assert_eq!(false, insert_res);
+  let insert_full4_res = full4.insert(12);
+  assert_eq!(false, insert_full4_res);
   assert_eq!(true, full4.is_full());
+
+  let pop_res = full4.pop();
+  assert_eq!(Some(0), pop_res);
+  assert_eq!(false, full4.is_full());
 
   assert_eq!(false, not_full.is_full());
   assert_eq!(false, not_full2.is_full());
   assert_eq!(false, not_full3.is_full());
+
+  let insert_not_full4_res = not_full4.insert(11);
+  assert_eq!(true, insert_not_full4_res);
+  assert_eq!(true, not_full4.is_full());
 }

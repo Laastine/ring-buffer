@@ -58,7 +58,6 @@ fn main() {
     }
     Ok(ForkResult::Child) => {
       let mut end_count = 0;
-      let mut res_print = true;
       // Consumer
       loop {
         let mut rb = shared_data.wlock::<RingBuffer>(0)
@@ -70,13 +69,13 @@ fn main() {
           end_count += 1;
         }
 
-        if res_print && rb.is_empty() && end_count == MAX_LEN {
-          println!("Read {} elements", end_count);
-          res_print = false;
+        if rb.is_empty() && end_count == MAX_LEN {
+          break;
         }
 
         drop(rb);
       }
+      println!("Read {} elements", end_count);
     }
     Err(e) => panic!("Failed to fork child process {}", e),
   }

@@ -44,14 +44,12 @@ fn main() {
 
         if rb.is_empty() && num == MAX_LEN {
           let end_time = time::Instant::now();
-          let elapsed = end_time.duration_since(start_time).subsec_nanos() as u64 / 1_000_000;
+          let elapsed = u64::from(end_time.duration_since(start_time).subsec_nanos()) / 1_000_000;
           let elapsed_sec = end_time.duration_since(start_time).as_secs() * 1_000;
-          println!("Duration {:?} (ms)", elapsed_sec + elapsed);
+          println!("Producer duration {:?} (ms)", elapsed_sec + elapsed);
           process::exit(0)
-        } else if num < MAX_LEN {
-          if rb.insert(num + 1) {
-            num += 1;
-          }
+        } else if num < MAX_LEN && rb.insert(num + 1) {
+          num += 1;
         }
         drop(rb);
       }
@@ -75,7 +73,7 @@ fn main() {
 
         drop(rb);
       }
-      println!("Read {} elements", end_count);
+      println!("Consumer read {} elements", end_count);
     }
     Err(e) => panic!("Failed to fork child process {}", e),
   }

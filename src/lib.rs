@@ -25,13 +25,14 @@ impl RingBuffer {
     ((self.end_idx + 1) % LENGTH) == (self.start_idx % LENGTH)
   }
 
-  fn is_empty(&self) -> bool {
+  pub fn is_empty(&self) -> bool {
     self.start_idx == self.end_idx
   }
 
-  pub fn insert(&mut self, el: usize) -> () {
+  pub fn insert(&mut self, el: usize) -> bool {
     if self.is_full() {
       self.start_idx = if self.start_idx == LENGTH - 1 { 0 } else { self.start_idx + 1 };
+      return false
     }
     if self.end_idx < LENGTH - 1 {
       self.data[self.end_idx] = el;
@@ -40,6 +41,7 @@ impl RingBuffer {
       self.data[self.end_idx] = el;
       self.end_idx = 0;
     }
+    true
   }
 
   pub fn pop(&mut self) -> Option<usize> {

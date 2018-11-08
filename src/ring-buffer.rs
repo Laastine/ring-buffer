@@ -6,7 +6,11 @@ use nix::unistd::{fork, ForkResult};
 use shared_memory::{LockType, SharedMem, WriteLockable};
 use std::ffi::OsStr;
 use std::process;
+use std::time;
 use ring_buffer::{LENGTH, RingBuffer};
+
+//2**20
+const MAX_LEN: usize = 1_048_576;
 
 fn main() {
   let mut num = 0;
@@ -28,6 +32,7 @@ fn main() {
   }
 
   println!("Producer initialized");
+  let start_time = time::Instant::now();
 
   match fork() {
     Ok(ForkResult::Parent { .. }) => {
@@ -37,12 +42,14 @@ fn main() {
           shared_data.wlock::<RingBuffer>(0)
             .unwrap_or_else(|e| panic!("Read lock error {}", e));
 
-        shared_state.insert(num);
-
-        num += 1;
-        //2**24
-        if num == 16_777_216 {
+        if shared_state.is_empty() && num == MAX_LEN {
+          let elapsed = start_time.elapsed().subsec_millis() as f64 / 1_000.0;
+          println!("Duration {:?}", elapsed);
           process::exit(0)
+        } else if num < MAX_LEN {
+          if shared_state.insert(num + 1) {
+            num += 1;
+          }
         }
 
         drop(shared_state);

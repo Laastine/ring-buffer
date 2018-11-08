@@ -66,6 +66,7 @@ fn main() {
                                 .unwrap_or_else(|e| panic!("Failed to get read lock {}", e));
 
         rb.pop();
+        // TODO: ensure that something is done with data
 
         drop(rb);
       }
